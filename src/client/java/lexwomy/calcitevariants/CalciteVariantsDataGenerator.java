@@ -5,8 +5,10 @@ import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.core.HolderLookup;
@@ -14,10 +16,13 @@ import net.minecraft.data.BlockFamily;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -89,11 +94,35 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
             return "CalciteVariantsRecipeProvider";
         }
     }
+    private static class CalciteVariantsBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+        private CalciteVariantsBlockTagProvider(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+            super(output, registriesFuture);
+        }
+
+        @Override
+        protected void addTags(HolderLookup.Provider wrapperLookup) {
+            valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE).add(CalciteVariants.CALCITE_SLAB, CalciteVariants.CALCITE_WALL, CalciteVariants.CALCITE_STAIRS).setReplace(false);
+        }
+    }
+    private static class CalciteVariantsBlockLootProvider extends FabricBlockLootTableProvider {
+        private CalciteVariantsBlockLootProvider(FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+            super(dataOutput, registryLookup);
+        }
+
+        @Override
+        public void generate() {
+            this.add(CalciteVariants.CALCITE_SLAB, this::createSlabItemTable);
+            this.dropSelf(CalciteVariants.CALCITE_STAIRS);
+            this.dropSelf(CalciteVariants.CALCITE_WALL);
+        }
+    }
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(CalciteVariantsModelProvider::new);
         pack.addProvider(CalciteVariantsRecipeProvider::new);
         pack.addProvider(CalciteVariantsLanguageProvider::new);
+        pack.addProvider(CalciteVariantsBlockTagProvider::new);
+        pack.addProvider(CalciteVariantsBlockLootProvider::new);
 	}
 }
