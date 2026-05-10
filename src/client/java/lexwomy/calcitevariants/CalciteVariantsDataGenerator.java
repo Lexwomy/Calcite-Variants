@@ -12,11 +12,11 @@ import lexwomy.verticalslabs.data.VerticalSlabDetails;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.core.HolderLookup;
@@ -60,17 +60,17 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
     pack.addProvider(CalciteVariantsModelProvider::new);
     pack.addProvider(CalciteVariantsRecipeProvider::new);
     pack.addProvider(CalciteVariantsLanguageProvider::new);
-    CalciteVariantsBlockTagProvider calciteVariantsBlockTagProvider =
-        pack.addProvider(CalciteVariantsBlockTagProvider::new);
+    CalciteVariantsBlockTagsProvider calciteVariantsBlockTagsProvider =
+        pack.addProvider(CalciteVariantsBlockTagsProvider::new);
     pack.addProvider(
         (output, registriesFuture) ->
-            new CalciteVariantsItemTagProvider(
-                output, registriesFuture, calciteVariantsBlockTagProvider));
+            new CalciteVariantsItemTagsProvider(
+                output, registriesFuture, calciteVariantsBlockTagsProvider));
     pack.addProvider(CalciteVariantsBlockLootProvider::new);
   }
 
   private static class CalciteVariantsModelProvider extends FabricModelProvider {
-    private CalciteVariantsModelProvider(FabricDataOutput output) {
+    private CalciteVariantsModelProvider(FabricPackOutput output) {
       super(output);
     }
 
@@ -92,7 +92,7 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
             new Pair<>("block.calcite_variants.calcite_wall", "Calcite Wall"));
 
     private CalciteVariantsLanguageProvider(
-        FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        FabricPackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
       super(dataOutput, registryLookup);
     }
 
@@ -108,7 +108,7 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
 
   private static class CalciteVariantsRecipeProvider extends FabricRecipeProvider {
     private CalciteVariantsRecipeProvider(
-        FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
       super(output, registriesFuture);
     }
 
@@ -136,9 +136,10 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
     }
   }
 
-  private static class CalciteVariantsBlockTagProvider extends FabricTagProvider.BlockTagProvider {
-    private CalciteVariantsBlockTagProvider(
-        FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+  private static class CalciteVariantsBlockTagsProvider
+      extends FabricTagsProvider.BlockTagsProvider {
+    private CalciteVariantsBlockTagsProvider(
+        FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
       super(output, registriesFuture);
     }
 
@@ -162,12 +163,12 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
     }
   }
 
-  private static class CalciteVariantsItemTagProvider extends FabricTagProvider.ItemTagProvider {
-    private CalciteVariantsItemTagProvider(
-        FabricDataOutput output,
+  private static class CalciteVariantsItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
+    private CalciteVariantsItemTagsProvider(
+        FabricPackOutput output,
         CompletableFuture<HolderLookup.Provider> registriesFuture,
-        @Nullable BlockTagProvider blockTagProvider) {
-      super(output, registriesFuture, blockTagProvider);
+        @Nullable BlockTagsProvider blockTagsProvider) {
+      super(output, registriesFuture, blockTagsProvider);
     }
 
     @Override
@@ -190,9 +191,9 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
     }
   }
 
-  private static class CalciteVariantsBlockLootProvider extends FabricBlockLootTableProvider {
+  private static class CalciteVariantsBlockLootProvider extends FabricBlockLootSubProvider {
     private CalciteVariantsBlockLootProvider(
-        FabricDataOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
+        FabricPackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
       super(dataOutput, registryLookup);
     }
 

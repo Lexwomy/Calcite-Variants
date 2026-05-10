@@ -5,7 +5,7 @@ import lexwomy.verticalslabs.VerticalSlabs;
 import lexwomy.verticalslabs.block.VerticalSlab;
 import lexwomy.verticalslabs.block.VerticalSlabBlock;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -78,7 +78,7 @@ public class CalciteVariants implements ModInitializer {
       LOGGER.info("Vertical slab mod dependency not found, skipping calcite vertical slabs");
     }
 
-    ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.BUILDING_BLOCKS)
+    CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
         .register(
             (itemGroup) -> {
               itemGroup.accept(CALCITE_SLAB.asItem());
@@ -89,7 +89,7 @@ public class CalciteVariants implements ModInitializer {
               }
             });
     if (CALCITE_VERTICAL_SLAB != null) {
-      ItemGroupEvents.modifyEntriesEvent(VerticalSlab.VERTICAL_SLAB_GROUP_KEY)
+      CreativeModeTabEvents.modifyOutputEvent(VerticalSlab.VERTICAL_SLAB_GROUP_KEY)
           .register(
               (itemGroup) -> {
                 itemGroup.accept(CALCITE_VERTICAL_SLAB);
