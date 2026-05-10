@@ -1,18 +1,14 @@
 {
 	"schemaVersion": 1,
 	"id": "calcite_variants",
-	"version": "v1.0.0",
+	"version": "1.0.0+mc1.21.11",
 	"name": "Calcite Variants",
 	"description": "Adds calcite slabs, stairs, and walls.",
 	"authors": [
 		"Lexwomy"
 	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/calcite-variants/icon.png",
+	"license": "MIT",
+	"icon": "assets/calcite_variants/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -26,9 +22,12 @@
 		]
 	},
 	"depends": {
-		"fabricloader": ">=0.18.4",
+		"fabricloader": ">=0.19.2",
 		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*"
+	},
+	"recommends": {
+		"vertical_slabs": "1.0.1+mc1.21.11"
 	}
 }

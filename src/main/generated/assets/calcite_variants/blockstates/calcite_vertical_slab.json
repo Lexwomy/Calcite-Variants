@@ -1,0 +1,58 @@
+{
+  "variants": {
+    "facing=east,type=bottom": {
+      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=east,type=double": {
+      "model": "minecraft:block/calcite",
+      "uvlock": true
+    },
+    "facing=east,type=top": {
+      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=north,type=bottom": {
+      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "uvlock": true
+    },
+    "facing=north,type=double": {
+      "model": "minecraft:block/calcite",
+      "uvlock": true
+    },
+    "facing=north,type=top": {
+      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "uvlock": true
+    },
+    "facing=south,type=bottom": {
+      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=south,type=double": {
+      "model": "minecraft:block/calcite",
+      "uvlock": true
+    },
+    "facing=south,type=top": {
+      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,type=bottom": {
+      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "uvlock": true,
+      "y": 270
+    },
+    "facing=west,type=double": {
+      "model": "minecraft:block/calcite",
+      "uvlock": true
+    },
+    "facing=west,type=top": {
+      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "uvlock": true,
+      "y": 270
+    }
+  }
+}

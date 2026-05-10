@@ -1,0 +1,12 @@
+{
+  "parent": "vertical_slabs:block/vertical_bottom_slab",
+  "textures": {
+    "down": "minecraft:block/calcite",
+    "east": "minecraft:block/calcite",
+    "north": "minecraft:block/calcite",
+    "particle": "minecraft:block/calcite",
+    "south": "minecraft:block/calcite",
+    "up": "minecraft:block/calcite",
+    "west": "minecraft:block/calcite"
+  }
+}

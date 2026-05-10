@@ -29,8 +29,9 @@ bin/
 *.DS_Store
 
 # fabric
-
+remappedSrc/
 run/
+src/main/generated/.cache
 
 # java
 
