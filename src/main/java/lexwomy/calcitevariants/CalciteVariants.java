@@ -1,6 +1,7 @@
 package lexwomy.calcitevariants;
 
 import java.util.function.Function;
+import lexwomy.calcitevariants.references.CalciteVariantsBlockItemIds;
 import lexwomy.verticalslabs.VerticalSlabs;
 import lexwomy.verticalslabs.block.VerticalSlab;
 import lexwomy.verticalslabs.block.VerticalSlabBlock;
@@ -9,9 +10,9 @@ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockItemTagId;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
@@ -26,40 +27,52 @@ public class CalciteVariants implements ModInitializer {
   public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
   public static final Block CALCITE_SLAB =
       register(
-          "calcite_slab", SlabBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE));
+          CalciteVariantsBlockItemIds.CALCITE_SLAB,
+          SlabBlock::new,
+          BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE),
+          true);
   public static final Block CALCITE_STAIRS =
       register(
-          "calcite_stairs",
+          CalciteVariantsBlockItemIds.CALCITE_STAIRS,
           (properties) -> new StairBlock(Blocks.CALCITE.defaultBlockState(), properties),
-          BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE));
+          BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE),
+          true);
   public static final Block CALCITE_WALL =
       register(
-          "calcite_wall", WallBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE));
+          CalciteVariantsBlockItemIds.CALCITE_WALL,
+          WallBlock::new,
+          BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE),
+          true);
   public static boolean hasVerticalSlabDependency;
-  @Nullable public static Block CALCITE_VERTICAL_SLAB = null;
+  @Nullable public static Block VERTICAL_CALCITE_SLAB = null;
+
+  public static BlockItemTagId createBlockItemTagId(final String path) {
+    return BlockItemTagId.create(identifier(path), identifier(path));
+  }
+
+  public static BlockItemId createBlockItemId(final String name) {
+    return BlockItemId.create(identifier(name), identifier(name));
+  }
+
+  public static Identifier identifier(String path) {
+    return Identifier.fromNamespaceAndPath(MOD_ID, path);
+  }
 
   private static Block register(
-      String name,
+      BlockItemId name,
       Function<BlockBehaviour.Properties, Block> blockFactory,
-      BlockBehaviour.Properties settings) {
-    ResourceKey<Block> blockKey = keyOfBlock(name);
-    Block block = blockFactory.apply(settings.setId(blockKey));
+      BlockBehaviour.Properties properties,
+      boolean shouldRegisterItem) {
+    Block block = blockFactory.apply(properties.setId(name.block()));
 
-    ResourceKey<Item> itemKey = keyOfItem(name);
+    if (shouldRegisterItem) {
+      BlockItem blockItem =
+          new BlockItem(
+              block, new Item.Properties().setId(name.item()).useBlockDescriptionPrefix());
+      Registry.register(BuiltInRegistries.ITEM, name.item(), blockItem);
+    }
 
-    BlockItem blockItem =
-        new BlockItem(block, new Item.Properties().setId(itemKey).useBlockDescriptionPrefix());
-    Registry.register(BuiltInRegistries.ITEM, itemKey, blockItem);
-
-    return Registry.register(BuiltInRegistries.BLOCK, blockKey, block);
-  }
-
-  private static ResourceKey<Block> keyOfBlock(String name) {
-    return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MOD_ID, name));
-  }
-
-  private static ResourceKey<Item> keyOfItem(String name) {
-    return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, name));
+    return Registry.register(BuiltInRegistries.BLOCK, name.block(), block);
   }
 
   @Override
@@ -69,30 +82,34 @@ public class CalciteVariants implements ModInitializer {
     // Proceed with mild caution.
     hasVerticalSlabDependency = FabricLoader.getInstance().isModLoaded(VerticalSlabs.MOD_ID);
     if (hasVerticalSlabDependency) {
-      CALCITE_VERTICAL_SLAB =
+      VERTICAL_CALCITE_SLAB =
           register(
-              "calcite_vertical_slab",
+              CalciteVariantsBlockItemIds.VERTICAL_CALCITE_SLAB,
               VerticalSlabBlock::new,
-              BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE));
+              BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE),
+              true);
     } else {
       LOGGER.info("Vertical slab mod dependency not found, skipping calcite vertical slabs");
     }
-
+    BuiltInRegistries.BLOCK.addAlias(
+        identifier("calcite_vertical_slab"), identifier("vertical_calcite_slab"));
+    BuiltInRegistries.ITEM.addAlias(
+        identifier("calcite_vertical_slab"), identifier("vertical_calcite_slab"));
     CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
         .register(
             (itemGroup) -> {
               itemGroup.accept(CALCITE_SLAB.asItem());
               itemGroup.accept(CALCITE_STAIRS.asItem());
               itemGroup.accept(CALCITE_WALL.asItem());
-              if (CALCITE_VERTICAL_SLAB != null) {
-                itemGroup.accept(CALCITE_VERTICAL_SLAB.asItem());
+              if (VERTICAL_CALCITE_SLAB != null) {
+                itemGroup.accept(VERTICAL_CALCITE_SLAB.asItem());
               }
             });
-    if (CALCITE_VERTICAL_SLAB != null) {
+    if (VERTICAL_CALCITE_SLAB != null) {
       CreativeModeTabEvents.modifyOutputEvent(VerticalSlab.VERTICAL_SLAB_GROUP_KEY)
           .register(
               (itemGroup) -> {
-                itemGroup.accept(CALCITE_VERTICAL_SLAB);
+                itemGroup.accept(VERTICAL_CALCITE_SLAB);
               });
     }
   }

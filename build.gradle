@@ -47,7 +47,7 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    implementation "maven.modrinth:lexwomy_vertical_slabs:1.0.2+mc26.1"
+    implementation "maven.modrinth:lexwomy_vertical_slabs:1.0.3+mc26.2"
     // Fabric API. This is technically optional, but you probably want it anyway.
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 

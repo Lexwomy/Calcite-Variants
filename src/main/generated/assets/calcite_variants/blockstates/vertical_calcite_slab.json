@@ -1,7 +1,7 @@
 {
   "variants": {
     "facing=east,type=bottom": {
-      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "model": "calcite_variants:block/vertical_calcite_slab_bottom",
       "uvlock": true,
       "y": 90
     },
@@ -10,12 +10,12 @@
       "uvlock": true
     },
     "facing=east,type=top": {
-      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "model": "calcite_variants:block/vertical_calcite_slab_top",
       "uvlock": true,
       "y": 90
     },
     "facing=north,type=bottom": {
-      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "model": "calcite_variants:block/vertical_calcite_slab_bottom",
       "uvlock": true
     },
     "facing=north,type=double": {
@@ -23,11 +23,11 @@
       "uvlock": true
     },
     "facing=north,type=top": {
-      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "model": "calcite_variants:block/vertical_calcite_slab_top",
       "uvlock": true
     },
     "facing=south,type=bottom": {
-      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "model": "calcite_variants:block/vertical_calcite_slab_bottom",
       "uvlock": true,
       "y": 180
     },
@@ -36,12 +36,12 @@
       "uvlock": true
     },
     "facing=south,type=top": {
-      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "model": "calcite_variants:block/vertical_calcite_slab_top",
       "uvlock": true,
       "y": 180
     },
     "facing=west,type=bottom": {
-      "model": "calcite_variants:block/calcite_vertical_slab_bottom",
+      "model": "calcite_variants:block/vertical_calcite_slab_bottom",
       "uvlock": true,
       "y": 270
     },
@@ -50,7 +50,7 @@
       "uvlock": true
     },
     "facing=west,type=top": {
-      "model": "calcite_variants:block/calcite_vertical_slab_top",
+      "model": "calcite_variants:block/vertical_calcite_slab_top",
       "uvlock": true,
       "y": 270
     }

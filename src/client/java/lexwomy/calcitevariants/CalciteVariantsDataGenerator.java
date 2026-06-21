@@ -5,6 +5,7 @@ import static net.minecraft.data.BlockFamilies.familyBuilder;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import lexwomy.calcitevariants.references.CalciteVariantsBlockItemIds;
 import lexwomy.verticalslabs.VerticalSlabs;
 import lexwomy.verticalslabs.VerticalSlabsDataGenerator;
 import lexwomy.verticalslabs.data.BottomTopBasedBlockModelGenerator;
@@ -24,10 +25,11 @@ import net.minecraft.data.BlockFamily;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jspecify.annotations.Nullable;
 
@@ -43,15 +45,16 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
   @Override
   public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
     if (!CalciteVariants.hasVerticalSlabDependency
-        || CalciteVariants.CALCITE_VERTICAL_SLAB == null) {
+        || CalciteVariants.VERTICAL_CALCITE_SLAB == null) {
       throw new RuntimeException(
           "Calcite Variants datagen needs to be run with vertical slabs dependency!");
     }
 
     CALCITE_VERTICAL_SLAB_DETAILS =
         new VerticalSlabDetails(
-            "Calcite Vertical Slab",
-            CalciteVariants.CALCITE_VERTICAL_SLAB,
+            "Vertical Calcite Slab",
+            CalciteVariantsBlockItemIds.VERTICAL_CALCITE_SLAB,
+            CalciteVariants.VERTICAL_CALCITE_SLAB,
             Blocks.CALCITE,
             BottomTopBasedBlockModelGenerator.simpleUVLockedBlockModel(),
             List.of(Blocks.CALCITE),
@@ -85,11 +88,11 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
   }
 
   private static class CalciteVariantsLanguageProvider extends FabricLanguageProvider {
-    private static final List<Pair<String, String>> TRANSLATION_MAP =
+    private static final List<Pair<Block, String>> TRANSLATION_MAP =
         List.of(
-            new Pair<>("block.calcite_variants.calcite_slab", "Calcite Slab"),
-            new Pair<>("block.calcite_variants.calcite_stairs", "Calcite Stairs"),
-            new Pair<>("block.calcite_variants.calcite_wall", "Calcite Wall"));
+            new Pair<>(CalciteVariants.CALCITE_SLAB, "Calcite Slab"),
+            new Pair<>(CalciteVariants.CALCITE_STAIRS, "Calcite Stairs"),
+            new Pair<>(CalciteVariants.CALCITE_WALL, "Calcite Wall"));
 
     private CalciteVariantsLanguageProvider(
         FabricPackOutput dataOutput, CompletableFuture<HolderLookup.Provider> registryLookup) {
@@ -99,7 +102,7 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
     @Override
     public void generateTranslations(
         HolderLookup.Provider provider, TranslationBuilder translationBuilder) {
-      for (Pair<String, String> mapping : TRANSLATION_MAP) {
+      for (Pair<Block, String> mapping : TRANSLATION_MAP) {
         translationBuilder.add(mapping.getFirst(), mapping.getSecond());
       }
       CALCITE_VERTICAL_SLAB_DETAILS.generateTranslation(translationBuilder);
@@ -145,21 +148,26 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-      valueLookupBuilder(VerticalSlabs.VERTICAL_SLABS)
-          .add(CALCITE_VERTICAL_SLAB_DETAILS.slab())
+      this.tag(VerticalSlabs.VERTICAL_SLABS.block())
+          .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().block())
           .setReplace(false);
-      valueLookupBuilder(VerticalSlabs.VERTICAL_MINEABLE_SLABS)
-          .add(CALCITE_VERTICAL_SLAB_DETAILS.slab())
+      this.tag(VerticalSlabs.VERTICAL_MINEABLE_SLABS.block())
+          .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().block())
           .setReplace(false);
-      valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
-          .add(
-              CalciteVariants.CALCITE_SLAB,
-              CalciteVariants.CALCITE_WALL,
-              CalciteVariants.CALCITE_STAIRS)
+      this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+          .add(CalciteVariantsBlockItemIds.CALCITE_SLAB.block())
+          .add(CalciteVariantsBlockItemIds.CALCITE_WALL.block())
+          .add(CalciteVariantsBlockItemIds.CALCITE_STAIRS.block())
           .setReplace(false);
-      valueLookupBuilder(BlockTags.SLABS).add(CalciteVariants.CALCITE_SLAB).setReplace(false);
-      valueLookupBuilder(BlockTags.STAIRS).add(CalciteVariants.CALCITE_STAIRS).setReplace(false);
-      valueLookupBuilder(BlockTags.WALLS).add(CalciteVariants.CALCITE_WALL).setReplace(false);
+      this.tag(BlockTags.SLABS)
+          .add(CalciteVariantsBlockItemIds.CALCITE_SLAB.block())
+          .setReplace(false);
+      this.tag(BlockTags.STAIRS)
+          .add(CalciteVariantsBlockItemIds.CALCITE_STAIRS.block())
+          .setReplace(false);
+      this.tag(BlockTags.WALLS)
+          .add(CalciteVariantsBlockItemIds.CALCITE_WALL.block())
+          .setReplace(false);
     }
   }
 
@@ -173,20 +181,20 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-      valueLookupBuilder(VerticalSlabs.VERTICAL_SLABS_ITEMS)
-          .add(CALCITE_VERTICAL_SLAB_DETAILS.slab().asItem())
+      this.tag(VerticalSlabs.VERTICAL_SLABS.item())
+          .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().item())
           .setReplace(false);
-      valueLookupBuilder(VerticalSlabs.VERTICAL_MINEABLE_SLABS_ITEMS)
-          .add(CALCITE_VERTICAL_SLAB_DETAILS.slab().asItem())
+      this.tag(VerticalSlabs.VERTICAL_MINEABLE_SLABS.item())
+          .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().item())
           .setReplace(false);
-      valueLookupBuilder(ItemTags.SLABS)
-          .add(CalciteVariants.CALCITE_SLAB.asItem())
+      this.tag(BlockItemTags.SLABS.item())
+          .add(CalciteVariantsBlockItemIds.CALCITE_SLAB.item())
           .setReplace(false);
-      valueLookupBuilder(ItemTags.STAIRS)
-          .add(CalciteVariants.CALCITE_STAIRS.asItem())
+      this.tag(BlockItemTags.STAIRS.item())
+          .add(CalciteVariantsBlockItemIds.CALCITE_STAIRS.item())
           .setReplace(false);
-      valueLookupBuilder(ItemTags.WALLS)
-          .add(CalciteVariants.CALCITE_WALL.asItem())
+      this.tag(BlockItemTags.WALLS.item())
+          .add(CalciteVariantsBlockItemIds.CALCITE_WALL.item())
           .setReplace(false);
     }
   }

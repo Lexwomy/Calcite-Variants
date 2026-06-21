@@ -2,16 +2,14 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "add": false,
               "conditions": [
                 {
-                  "block": "calcite_variants:calcite_vertical_slab",
+                  "block": "calcite_variants:vertical_calcite_slab",
                   "condition": "minecraft:block_state_property",
                   "properties": {
                     "type": "double"
@@ -25,7 +23,7 @@
               "function": "minecraft:explosion_decay"
             }
           ],
-          "name": "calcite_variants:calcite_vertical_slab"
+          "name": "calcite_variants:vertical_calcite_slab"
         }
       ],
       "rolls": 1.0

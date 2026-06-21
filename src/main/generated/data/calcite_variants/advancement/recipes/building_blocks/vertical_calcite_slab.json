@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "calcite_variants:calcite_vertical_slab_from_calcite_stonecutting"
+        "recipe": "calcite_variants:vertical_calcite_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "calcite_variants:calcite_vertical_slab_from_calcite_stonecutting"
+      "calcite_variants:vertical_calcite_slab"
     ]
   }
 }
