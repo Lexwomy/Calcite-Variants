@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "calcite_variants:calcite_wall"
+        "recipes": "calcite_variants:calcite_wall"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

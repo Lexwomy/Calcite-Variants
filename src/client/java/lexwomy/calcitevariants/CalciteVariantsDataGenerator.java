@@ -6,10 +6,10 @@ import com.mojang.datafixers.util.Pair;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import lexwomy.calcitevariants.references.CalciteVariantsBlockItemIds;
-import lexwomy.verticalslabs.VerticalSlabs;
 import lexwomy.verticalslabs.VerticalSlabsDataGenerator;
 import lexwomy.verticalslabs.data.BottomTopBasedBlockModelGenerator;
 import lexwomy.verticalslabs.data.VerticalSlabDetails;
+import lexwomy.verticalslabs.references.VerticalSlabBlockItemTagIds;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -18,17 +18,19 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootSubProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import org.jspecify.annotations.Nullable;
@@ -117,8 +119,10 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     protected RecipeProvider createRecipeProvider(
-        HolderLookup.Provider provider, RecipeOutput recipeOutput) {
-      return new RecipeProvider(provider, recipeOutput) {
+        HolderLookup.Provider provider,
+        BootstrapContext<Recipe<?>> recipes,
+        BootstrapContext<Advancement> advancements) {
+      return new RecipeProvider(recipes, advancements) {
         @Override
         public void buildRecipes() {
           this.generateRecipes(CALCITE, FeatureFlagSet.of(FeatureFlags.VANILLA));
@@ -128,7 +132,7 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
               RecipeCategory.BUILDING_BLOCKS, CalciteVariants.CALCITE_STAIRS, Blocks.CALCITE);
           this.stonecutterResultFromBase(
               RecipeCategory.BUILDING_BLOCKS, CalciteVariants.CALCITE_WALL, Blocks.CALCITE);
-          CALCITE_VERTICAL_SLAB_DETAILS.generateRecipes(this, recipeOutput);
+          CALCITE_VERTICAL_SLAB_DETAILS.generateRecipes(this, this.output);
         }
       };
     }
@@ -148,10 +152,10 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-      this.tag(VerticalSlabs.VERTICAL_SLABS.block())
+      this.tag(VerticalSlabBlockItemTagIds.VERTICAL_SLABS.block())
           .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().block())
           .setReplace(false);
-      this.tag(VerticalSlabs.VERTICAL_MINEABLE_SLABS.block())
+      this.tag(VerticalSlabBlockItemTagIds.VERTICAL_MINEABLE_SLABS.block())
           .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().block())
           .setReplace(false);
       this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
@@ -181,10 +185,10 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-      this.tag(VerticalSlabs.VERTICAL_SLABS.item())
+      this.tag(VerticalSlabBlockItemTagIds.VERTICAL_SLABS.item())
           .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().item())
           .setReplace(false);
-      this.tag(VerticalSlabs.VERTICAL_MINEABLE_SLABS.item())
+      this.tag(VerticalSlabBlockItemTagIds.VERTICAL_MINEABLE_SLABS.item())
           .add(CALCITE_VERTICAL_SLAB_DETAILS.slabId().item())
           .setReplace(false);
       this.tag(BlockItemTags.SLABS.item())
@@ -213,7 +217,7 @@ public class CalciteVariantsDataGenerator implements DataGeneratorEntrypoint {
       this.add(
           CALCITE_VERTICAL_SLAB_DETAILS.slab(),
           VerticalSlabsDataGenerator.VerticalSlabsBlockLootProvider.createVerticalSlabLootTable(
-              this, CALCITE_VERTICAL_SLAB_DETAILS.slab()));
+              this, this.blocks, CALCITE_VERTICAL_SLAB_DETAILS.slab()));
     }
   }
 }
